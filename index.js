@@ -19,14 +19,15 @@ const loadPosts = (event) => {
                     </div>
                 </header>
                 <main>
-                    <img class="post-img" src="${post.post}" alt="post-img">
+                    <img class="post-img" id="${postsHTML.length}" src="${post.post}" alt="post-img">
                     <div class="post-actions">
-                        <img class="post-action" src="./img/like.svg" alt="like-icon">
+                        <img class="post-action" id="like-${postsHTML.length}" src="./img/like.svg" alt="like-icon">
                         <img class="post-action" src="./img/comment.svg" alt="comment-icon">
                         <img class="post-action" src="./img/share.svg" alt="send-icon">
                     </div>
                     <div class="post-likes">
-                        <p class="post-likes-number"><strong>${post.likes} likes</strong></p>
+                        <p class="post-likes-number" id="count-like-${postsHTML.length}"><strong>${post.likes}</strong></p>
+                        <p class="post-likes-text"><strong> likes</strong></p>
                     </div>
                     <div class="post-description">
                         <p class="post-comment-text"><strong>${post.username}</strong> ${post.comment}</p>
@@ -44,12 +45,30 @@ const loadPosts = (event) => {
 
 window.addEventListener('load', loadPosts)
 
-const likePost = () => {
-    console.log("like")
+const likePost = (el) => {
+    const ind = parseInt(el.getAttribute('id'))
+    const postLikeEl = document.getElementById(`like-${ind}`);
+    const postLikeCountEl = document.getElementById(`count-like-${ind}`);
+
+    let totalLikes = postLikeCountEl.children.item(0)
+    let likeImg = null
+
+    if (!postLikeEl) {
+        return
+    } else {
+        if (postLikeEl.getAttribute('src') === './img/like.svg') {
+            likeImg = './img/like-red.svg'
+            totalLikes.innerHTML++
+        } else {
+            likeImg = './img/like.svg'
+            totalLikes.innerHTML--
+        }
+        postLikeEl.setAttribute('src', likeImg)
+    }
 }
 
 function addListenLikes() {
     for (const element of postImgEl) {
-        element.addEventListener('dblclick', likePost)
+        element.addEventListener('dblclick', () => likePost(element))
     }
 }

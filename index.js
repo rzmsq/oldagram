@@ -45,6 +45,11 @@ const loadPosts = (event) => {
 
 window.addEventListener('load', loadPosts)
 
+function updateDB(ind, countLikes) {
+    postsHTML[ind] = postContainerEl.children.item(ind).innerHTML
+    posts[ind].likes = countLikes
+}
+
 const likePost = (el) => {
     const ind = parseInt(el.getAttribute('id'))
     const postLikeEl = document.getElementById(`like-${ind}`);
@@ -65,6 +70,8 @@ const likePost = (el) => {
         }
         postLikeEl.setAttribute('src', likeImg)
     }
+
+    updateDB(ind, totalLikes.innerHTML)
 }
 
 function addListenLikes() {

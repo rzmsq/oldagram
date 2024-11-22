@@ -5,6 +5,8 @@ let postImgEl = null
 
 let postsHTML = []
 
+const getNumbersOnly = (str) => str.replace(/[^0-9]/g, '')
+
 const loadPosts = (event) => {
     const newPosts = posts;
     newPosts.forEach((post) => {
@@ -51,7 +53,7 @@ function updateDB(ind, countLikes) {
 }
 
 const likePost = (el) => {
-    const ind = parseInt(el.getAttribute('id'))
+    const ind = parseInt(getNumbersOnly(el.getAttribute('id')))
     const postLikeEl = document.getElementById(`like-${ind}`);
     const postLikeCountEl = document.getElementById(`count-like-${ind}`);
 
@@ -77,5 +79,11 @@ const likePost = (el) => {
 function addListenLikes() {
     for (const element of postImgEl) {
         element.addEventListener('dblclick', () => likePost(element))
+    }
+    const foo = postContainerEl.getElementsByClassName('post-action')
+    for (const element of foo) {
+        if (element.getAttribute('src') === './img/like.svg') {
+            element.addEventListener('click', () => likePost(element))
+        }
     }
 }
